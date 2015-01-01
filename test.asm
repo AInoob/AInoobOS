@@ -3,6 +3,12 @@
 
 jmp     Main
 
+ClearScreen:
+mov     ah,0
+mov     al,3
+int     10h
+ret
+
 PrintTill0:
 lodsb
 cmp     al,0
@@ -14,22 +20,26 @@ jmp     PrintTill0
 PrintWithLength:
 mov     ah,13h
 int     10h
-jmp     Return
+ret
 
 Return:
 ret
 
 Main:
+call    ClearScreen
+
 mov     si,msg1
 call    PrintTill0
 
 cli
-push    SEGment msg2
-pop     es
+xor     ax,ax
+mov     es,ax
 mov     bp,msg2
 sti
 loop1:
 mov     cx,9
+mov     dh,13
+mov     dl,13
 call    PrintWithLength
 inc     bl
 jmp     loop1
